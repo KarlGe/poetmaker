@@ -1,0 +1,7 @@
+.editor-wrapper {
+    text-align: left;
+}
+
+.active {
+    color: var(--color-bg);
+}

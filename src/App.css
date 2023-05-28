@@ -36,7 +36,3 @@
 .card {
   padding: 2em;
 }
-
-.blacked-out {
-  color: var(--color-bg);
-}
