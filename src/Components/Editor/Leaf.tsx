@@ -1,6 +1,6 @@
-import React from "react";
+type Props = { attributes: any; children: any; leaf: any };
 
-const Leaf = ({ attributes, children, leaf }) => {
+const Leaf = ({ attributes, children, leaf }: Props) => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }

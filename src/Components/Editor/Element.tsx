@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import ElementChildren from "./ElementChildren";
 
-const Element = (props) => {
+const Element = (props: any) => {
   const { attributes, children, element } = props;
   switch (element.type) {
     default:

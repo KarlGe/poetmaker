@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import "./HtmlEditor.css";
 import { jsx } from "slate-hyperscript";
 import { Transforms, createEditor, Descendant, Editor } from "slate";
@@ -6,8 +6,13 @@ import { Slate, Editable, withReact } from "slate-react";
 import Element from "./Element";
 import Leaf from "./Leaf";
 
+type TypeDict = { [key: string]: any };
+
 const ELEMENT_TAGS = {
-  A: (el) => ({ type: "link", url: el.getAttribute("href") }),
+  A: (el: HTMLAnchorElement) => ({
+    type: "link",
+    url: el.getAttribute("href"),
+  }),
   BLOCKQUOTE: () => ({ type: "quote" }),
   H1: () => ({ type: "heading-one" }),
   H2: () => ({ type: "heading-two" }),
@@ -15,13 +20,16 @@ const ELEMENT_TAGS = {
   H4: () => ({ type: "heading-four" }),
   H5: () => ({ type: "heading-five" }),
   H6: () => ({ type: "heading-six" }),
-  IMG: (el) => ({ type: "image", url: el.getAttribute("src") }),
+  IMG: (el: HTMLImageElement) => ({
+    type: "image",
+    url: el.getAttribute("src"),
+  }),
   LI: () => ({ type: "list-item" }),
   OL: () => ({ type: "numbered-list" }),
   P: () => ({ type: "paragraph" }),
   PRE: () => ({ type: "code" }),
   UL: () => ({ type: "bulleted-list" }),
-};
+} as TypeDict;
 
 // COMPAT: `B` is omitted here because Google Docs uses `<b>` in weird ways.
 const TEXT_TAGS = {
@@ -32,9 +40,9 @@ const TEXT_TAGS = {
   S: () => ({ strikethrough: true }),
   STRONG: () => ({ bold: true }),
   U: () => ({ underline: true }),
-};
+} as TypeDict;
 
-export const deserialize = (el) => {
+export const deserialize = (el: ChildNode): any => {
   if (el.nodeType === 3) {
     return el.textContent;
   } else if (el.nodeType !== 1) {
@@ -51,7 +59,7 @@ export const deserialize = (el) => {
     el.childNodes[0] &&
     el.childNodes[0].nodeName === "CODE"
   ) {
-    parent = el.childNodes[0];
+    parent = el.childNodes[0] as HTMLElement;
   }
   let children = Array.from(parent.childNodes).map(deserialize).flat();
 
@@ -81,10 +89,10 @@ export const deserialize = (el) => {
 const HtmlEditor = () => {
   const [isEditing, setIsEditing] = useState(true);
   const renderElement = useCallback(
-    (props) => <Element {...props} isEditing={isEditing} />,
+    (props: any) => <Element {...props} isEditing={isEditing} />,
     [isEditing]
   );
-  const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+  const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHtml(withReact(createEditor())), []);
   return (
     <div className="editor-wrapper">
