@@ -6,7 +6,7 @@ const ElementChild = ({ child }: { child: any }) => {
   const [active, setActive] = useState<ActiveState>({});
 
   const onWordClick = (index: number) => {
-    setActive({ ...active, [index]: true });
+    setActive({ ...active, [index]: !active[index] });
   };
   const onWordMove = (event: any, index: number) => {
     const flags = event.buttons !== undefined ? event.buttons : event.which;
@@ -15,6 +15,20 @@ const ElementChild = ({ child }: { child: any }) => {
       onWordClick(index);
     }
   };
+  if (!child.props.text) {
+    return (
+      <span
+        {...child.props.attributes}
+        contentEditable={false}
+        key={child.key}
+        className={active[child.key] ? "active" : ""}
+        onPointerDown={() => onWordClick(child.key)}
+            onPointerEnter={(e) => onWordMove(e, child.key)}
+      >
+        {child}
+      </span>
+    );
+  }
   const childText = child.props.text.text;
   return childText.split(" ").map((word: string, index: number) => (
     <span
