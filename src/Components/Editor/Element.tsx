@@ -5,7 +5,13 @@ const Element = (props) => {
   const { attributes, children, element } = props;
   switch (element.type) {
     default:
-      return <p {...attributes}>{children}</p>;
+      return (
+        <p {...attributes}>
+          <ElementChildren isEditing={props.isEditing}>
+            {children}
+          </ElementChildren>
+        </p>
+      );
     case "quote":
       return <blockquote {...attributes}>{children}</blockquote>;
     case "code":

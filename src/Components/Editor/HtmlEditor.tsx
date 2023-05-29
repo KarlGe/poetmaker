@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import "./HtmlEditor.css";
 import { jsx } from "slate-hyperscript";
 import { Transforms, createEditor, Descendant, Editor } from "slate";
@@ -79,11 +79,18 @@ export const deserialize = (el) => {
 };
 
 const HtmlEditor = () => {
-  const renderElement = useCallback((props) => <Element {...props} />, []);
+  const [isEditing, setIsEditing] = useState(true);
+  const renderElement = useCallback(
+    (props) => <Element {...props} isEditing={isEditing} />,
+    [isEditing]
+  );
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHtml(withReact(createEditor())), []);
   return (
     <div className="editor-wrapper">
+      <button type="button" onClick={() => setIsEditing(!isEditing)}>
+        {isEditing ? "Stop edit" : "Edit text"}
+      </button>
       <Slate editor={editor} value={initialValue}>
         <Editable
           spellCheck={false}
